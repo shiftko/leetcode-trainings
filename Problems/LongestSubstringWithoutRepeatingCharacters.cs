@@ -1,8 +1,6 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿namespace Problems;
 
-namespace LongestSubstringWithoutRepeatingCharacters;
-
-public static class SubstringHelper
+public static class LongestSubstringWithoutRepeatingCharacters
 {
     public static int GetLengthOfLongestSubstringBalanced(string s)
     {

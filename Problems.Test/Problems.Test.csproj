@@ -22,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\LongestSubstringWithoutRepeatingCharacters\LongestSubstringWithoutRepeatingCharacters.csproj" />
+      <ProjectReference Include="..\Problems\Problems.csproj" />
     </ItemGroup>
 
 </Project>
