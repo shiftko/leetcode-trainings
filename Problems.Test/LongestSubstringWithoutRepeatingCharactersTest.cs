@@ -4,7 +4,7 @@ using LSWRC = LongestSubstringWithoutRepeatingCharacters;
 
 public class LongestSubstringWithoutRepeatingCharactersTest
 {
-    private readonly Dictionary<string, int> testData = new()
+    private readonly Dictionary<string, int> _testData = new()
     {
         { "abcabcbb", 3 },
         { "bbbbb", 1 },
@@ -14,7 +14,7 @@ public class LongestSubstringWithoutRepeatingCharactersTest
     [Fact]
     public void GetLengthOfLongestSubstringBalancedTest()
     {
-        foreach (var kvp in testData)
+        foreach (var kvp in _testData)
         {
             Assert.Equal(kvp.Value, LSWRC.GetLengthOfLongestSubstringBalanced(kvp.Key));
         }
@@ -23,7 +23,7 @@ public class LongestSubstringWithoutRepeatingCharactersTest
     [Fact]
     public void GetLengthOfLongestSubstringFastestTest()
     {
-        foreach (var kvp in testData)
+        foreach (var kvp in _testData)
         {
             Assert.Equal(kvp.Value, LSWRC.GetLengthOfLongestSubstringFastest(kvp.Key));
         }
