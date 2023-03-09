@@ -1,6 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-int LengthOfLongestSubstring(string s)
+int LengthOfLongestSubstringBalance(string s)
 {
     var maxLen = 0;
     var chars = new Dictionary<char, int>();
@@ -21,8 +21,38 @@ int LengthOfLongestSubstring(string s)
     return Math.Max(maxLen, chars.Count);
 }
 
-// expected 3
-Console.WriteLine(LengthOfLongestSubstring("pwwkew"));
+int LengthOfLongestSubstringQuick(string s)
+{
+    var maxLen = 0;
+    var sub = "";
+    foreach (var chr in s)
+    {
+        if (!sub.Contains(chr))
+        {
+            sub += chr;
+        }
+        else
+        {
+            if (sub.Length > maxLen)
+            {
+                maxLen = sub.Length;
+            }
+
+            sub = sub.Substring(sub.IndexOf(chr) + 1) + chr;
+        }
+    }
+
+    return sub.Length > maxLen ? sub.Length : maxLen;
+}
 
 // expected 3
-Console.WriteLine(LengthOfLongestSubstring("abcabcbb"));
+Console.WriteLine(LengthOfLongestSubstringBalance("pwwkew"));
+
+// expected 3
+Console.WriteLine(LengthOfLongestSubstringBalance("abcabcbb"));
+
+// expected 3
+Console.WriteLine(LengthOfLongestSubstringQuick("pwwkew"));
+
+// expected 3
+Console.WriteLine(LengthOfLongestSubstringQuick("abcabcbb"));
