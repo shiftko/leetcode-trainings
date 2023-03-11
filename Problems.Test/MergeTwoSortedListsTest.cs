@@ -1,4 +1,6 @@
-﻿namespace Problems.Test;
+﻿using _llh = Problems.Shared.LinkedListHelper;
+
+namespace Problems.Test;
 
 public class MergeTwoSortedListsTest
 {
@@ -15,36 +17,12 @@ public class MergeTwoSortedListsTest
     {
         foreach (var kvp in _testData)
         {
-            var headNode1 = CreateSequenceAndGetHead(kvp.Key["set1"]);
-            var headNode2 = CreateSequenceAndGetHead(kvp.Key["set2"]);
+            var headNode1 = _llh.CreateSequenceAndGetHead(kvp.Key["set1"]);
+            var headNode2 = _llh.CreateSequenceAndGetHead(kvp.Key["set2"]);
 
             var headNodeRes = MergeTwoSortedLists.MergeTwoLists(headNode1, headNode2);
 
-            Assert.Equal(kvp.Value, GetValues(headNodeRes));
+            Assert.Equal(kvp.Value, _llh.GetValues(headNodeRes));
         }
-    }
-
-    private static ListNode? CreateSequenceAndGetHead(IReadOnlyList<int> set)
-    {
-        ListNode? headNode = null;
-        for (var i = set.Count - 1; i >= 0; i--)
-        {
-            var currentNode = new ListNode(set[i], headNode);
-            headNode = currentNode;
-        }
-
-        return headNode;
-    }
-
-    private static int[] GetValues(ListNode? node)
-    {
-        var values = new List<int>();
-        while (node is not null)
-        {
-            values.Add(node.Val);
-            node = node.Next;
-        }
-
-        return values.ToArray();
     }
 }

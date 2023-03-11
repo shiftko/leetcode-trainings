@@ -1,4 +1,6 @@
-﻿namespace Problems;
+﻿using Problems.Shared;
+
+namespace Problems;
 
 public static class MergeTwoSortedLists
 {
@@ -68,17 +70,5 @@ public static class MergeTwoSortedLists
         }
 
         return headNode;
-    }
-}
-
-public class ListNode
-{
-    public int Val;
-    public ListNode? Next;
-
-    public ListNode(int val = 0, ListNode? next = null)
-    {
-        this.Val = val;
-        this.Next = next;
     }
 }
