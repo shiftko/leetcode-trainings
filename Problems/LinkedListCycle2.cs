@@ -6,8 +6,7 @@ public static class LinkedListCycle2
 {
     public static ListNode? DetectCycle(ListNode? head)
     {
-        ListNode? cycleNode = null;
-        var refs = new List<ListNode?>();
+        var refs = new HashSet<ListNode>();
         while (head is not null)
         {
             if (refs.Contains(head.Next))
@@ -19,7 +18,7 @@ public static class LinkedListCycle2
             head = head.Next;
         }
 
-        return cycleNode;
+        return null;
     }
 
     public static ListNode? DetectCycle2(ListNode? head)
