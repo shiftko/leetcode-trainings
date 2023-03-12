@@ -7,9 +7,9 @@ public class MergeTwoSortedListsTest
     private readonly Dictionary<Dictionary<string, int[]>, int[]> _testData = new()
     {
         { new() { { "set1", new[] { 1, 2, 4 } }, { "set2", new[] { 1, 3, 4 } } }, new[] { 1, 1, 2, 3, 4, 4 } },
-        { new() { { "set1", new[] { 1, 2, 4 } }, { "set2", new int[] { } } }, new[] { 1, 2, 4 } },
-        { new() { { "set1", new int[] { } }, { "set2", new[] { 4, 5, 6 } } }, new[] { 4, 5, 6 } },
-        { new() { { "set1", new int[] { } }, { "set2", new int[] { } } }, new int[] { } },
+        { new() { { "set1", new[] { 1, 2, 4 } }, { "set2", Array.Empty<int>() } }, new[] { 1, 2, 4 } },
+        { new() { { "set1", Array.Empty<int>() }, { "set2", new[] { 4, 5, 6 } } }, new[] { 4, 5, 6 } },
+        { new() { { "set1", Array.Empty<int>() }, { "set2", Array.Empty<int>() } }, Array.Empty<int>() },
     };
 
     [Fact]

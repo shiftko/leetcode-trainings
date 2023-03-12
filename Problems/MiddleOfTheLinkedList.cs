@@ -2,7 +2,7 @@
 
 namespace Problems;
 
-public class MiddleOfTheLinkedList
+public static class MiddleOfTheLinkedList
 {
     public static ListNode? GetMiddleNode(ListNode? head)
     {

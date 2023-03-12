@@ -1,6 +1,6 @@
 ﻿namespace Problems;
 
-public class FindPivotIndex
+public static class FindPivotIndex
 {
     public static int PivotIndex(int[] nums)
     {
