@@ -2,18 +2,23 @@
 
 public static class BestTimeToBuyAndSellStock
 {
-    // bad implementation
     public static int GetMaxProfit(int[] prices)
     {
         var maxProfit = 0;
-        for (int i = 0; i < prices.Length - 1; i++)
+        var minPrice = Int32.MaxValue;
+        for (int i = 0; i < prices.Length; i++)
         {
-            for (int j = i + 1; j < prices.Length; j++)
+            var currentPrice = prices[i];
+            if (currentPrice < minPrice)
             {
-                var profit = prices[j] - prices[i];
-                if (profit > maxProfit)
+                minPrice = currentPrice;
+            }
+            else
+            {
+                var currentProfit = currentPrice - minPrice;
+                if (currentProfit > maxProfit)
                 {
-                    maxProfit = profit;
+                    maxProfit = currentProfit;
                 }
             }
         }
