@@ -7,41 +7,49 @@ public static class NumberOfIslands
         const char land = '1';
         const char water = '0';
         var islandСounter = 0;
-        var checkedSet = new List<((int m, int n) cell, HashSet<(int m, int n)> island)>();
+
+        var cells = new Dictionary<(int m, int n), HashSet<(int m, int n)>>();
+        var cellQueue = new List<((int m, int n) cell, HashSet<(int m, int n)> lands)>
+        {
+            (cell: (0, 0), lands: new HashSet<(int m, int n)>())
+        };
 
         var counter = 0;
-        while (counter < checkedSet.Count)
+        while (counter < cellQueue.Count)
         {
-            var cell = checkedSet[counter].cell;
-            var island = checkedSet[counter].island;
+            var cell = cellQueue[counter].cell;
+            var lands = cellQueue[counter++].lands;
 
             if (grid[cell.m][cell.n] == land)
             {
-                island.Add(cell);
-            }
+                if (cells.TryGetValue((cell.m, cell.n), out var landList))
+                {
+                    lands.UnionWith(landList);
+                }
+                else
+                {
+                    cells.Add((cell.m, cell.n), new HashSet<(int m, int n)>(lands));
+                    islandСounter++;
+                }
 
-            // add next cells to checked set
-            if (cell.m - 1 >= 0)
+                lands.Add(cell);
+            }
+            else
             {
-                checkedSet.Add((cell with { m = cell.m - 1 }, island));
+                lands = new HashSet<(int m, int n)>();
             }
 
             if (cell.m + 1 < grid.Length)
             {
-                checkedSet.Add((cell with { m = cell.m + 1 }, island));
-            }
-
-            if (cell.n - 1 >= 0)
-            {
-                checkedSet.Add((cell with { n = cell.n - 1 }, island));
+                cellQueue.Add((cell with { m = cell.m + 1 }, lands));
             }
 
             if (cell.n + 1 < grid[cell.m].Length)
             {
-                checkedSet.Add((cell with { n = cell.n + 1 }, island));
+                cellQueue.Add((cell with { n = cell.n + 1 }, lands));
             }
         }
 
-        return counter;
+        return islandСounter;
     }
 }
