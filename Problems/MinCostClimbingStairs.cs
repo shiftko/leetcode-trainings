@@ -52,11 +52,22 @@ public static class MinCostClimbingStairs
 
     public static int GetMinCostClimbingStairsFast(int[] cost)
     {
-        var costs = new HashSet<int>();
+        var lowestCost = int.MaxValue;
+
+        if (cost.Length < 2)
+        {
+            return 0;
+        }
+
+        if (cost.Length == 2)
+        {
+            return cost[0] < cost[1] ? cost[0] : cost[1];
+        }
+
         var queue = new List<FastNode>
         {
-            new FastNode(0, cost[0], cost[0]),
-            new FastNode(1, cost[1], cost[1])
+            new FastNode(0, cost[0]),
+            new FastNode(1, cost[1])
         };
 
         var count = 0;
@@ -71,17 +82,17 @@ public static class MinCostClimbingStairs
                 var i = currentNode.Index + increment;
                 if (i < cost.Length)
                 {
-                    var nextNode = new FastNode(i, cost[i], currentNode.TotalCost + cost[i]);
+                    var nextNode = new FastNode(i, currentNode.TotalCost + cost[i]);
                     queue.Add(nextNode);
                 }
-                else
+                else if (currentNode.TotalCost < lowestCost)
                 {
-                    costs.Add(currentNode.TotalCost);
+                    lowestCost = currentNode.TotalCost;
                 }
             }
         }
 
-        return costs.Min();
+        return lowestCost;
     }
 
     class Node
@@ -102,13 +113,11 @@ public static class MinCostClimbingStairs
     class FastNode
     {
         public readonly int Index;
-        public readonly int Cost;
         public readonly int TotalCost;
 
-        public FastNode(int index, int cost, int totalCost)
+        public FastNode(int index, int totalCost)
         {
             Index = index;
-            Cost = cost;
             TotalCost = totalCost;
         }
     }
