@@ -17,4 +17,20 @@ public class MinCostClimbingStairsTest
 
         Assert.Equal(15, MinCostClimbingStairs.GetMinCostClimbingStairs(payload));
     }
+
+    [Fact]
+    public void GetMinCostClimbingStairsFastTest()
+    {
+        var payload = new[] { 1, 100, 1, 1, 1, 100, 1, 1, 100, 1 };
+
+        Assert.Equal(6, MinCostClimbingStairs.GetMinCostClimbingStairsFast(payload));
+    }
+
+    [Fact]
+    public void GetMinCostClimbingStairsFastTest2()
+    {
+        var payload = new[] { 10, 15, 20 };
+
+        Assert.Equal(15, MinCostClimbingStairs.GetMinCostClimbingStairsFast(payload));
+    }
 }
