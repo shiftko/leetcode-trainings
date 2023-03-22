@@ -64,10 +64,10 @@ public static class MinCostClimbingStairs
             return cost[0] < cost[1] ? cost[0] : cost[1];
         }
 
-        var queue = new List<FastNode>
+        var queue = new List<(int Index, int TotalCost)>
         {
-            new FastNode(0, cost[0]),
-            new FastNode(1, cost[1])
+            (Index: 0, TotalCost: cost[0]),
+            (Index: 1, TotalCost: cost[1]),
         };
 
         var count = 0;
@@ -82,8 +82,7 @@ public static class MinCostClimbingStairs
                 var i = currentNode.Index + increment;
                 if (i < cost.Length)
                 {
-                    var nextNode = new FastNode(i, currentNode.TotalCost + cost[i]);
-                    queue.Add(nextNode);
+                    queue.Add((Index: i, TotalCost: currentNode.TotalCost + cost[i]));
                 }
                 else if (currentNode.TotalCost < lowestCost)
                 {
@@ -107,18 +106,6 @@ public static class MinCostClimbingStairs
             Index = index;
             Cost = cost;
             Parent = parent;
-        }
-    }
-
-    class FastNode
-    {
-        public readonly int Index;
-        public readonly int TotalCost;
-
-        public FastNode(int index, int totalCost)
-        {
-            Index = index;
-            TotalCost = totalCost;
         }
     }
 }
