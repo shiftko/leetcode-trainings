@@ -19,24 +19,7 @@ public class MinCostClimbingStairsTest
     }
 
     [Fact]
-    public void GetMinCostClimbingStairsFastTest()
-    {
-        var payload = new[] { 1, 100, 1, 1, 1, 100, 1, 1, 100, 1 };
-
-        Assert.Equal(6, MinCostClimbingStairs.GetMinCostClimbingStairsFast(payload));
-    }
-
-    [Fact]
-    public void GetMinCostClimbingStairsFastTest2()
-    {
-        var payload = new[] { 10, 15, 20 };
-
-        Assert.Equal(15, MinCostClimbingStairs.GetMinCostClimbingStairsFast(payload));
-    }
-
-    // Out of memory.
-    // [Fact]
-    public void GetMinCostClimbingStairsFastTest3()
+    public void GetMinCostClimbingStairsDijkstraTest3()
     {
         var payload = new[]
         {
@@ -88,6 +71,6 @@ public class MinCostClimbingStairsTest
             317, 847, 76, 566, 415, 874, 399, 613, 816, 613, 467, 191
         };
 
-        Assert.Equal(15, MinCostClimbingStairs.GetMinCostClimbingStairsFast(payload));
+        Assert.Equal(209040, MinCostClimbingStairs.GetMinCostClimbingStairs(payload));
     }
 }
