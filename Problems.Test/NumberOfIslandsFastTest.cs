@@ -1,6 +1,6 @@
 ﻿namespace Problems.Test;
 
-public class NumberOfIslandsTest
+public class NumberOfIslandsFastTest
 {
     private readonly List<(char[][] Input, int Output)> _testData = new()
     {
@@ -70,7 +70,7 @@ public class NumberOfIslandsTest
     {
         foreach (var (input, output) in _testData)
         {
-            Assert.Equal(output, NumberOfIslands.GetNumIslands(input));
+            Assert.Equal(output, NumberOfIslandsFast.GetNumIslands(input));
         }
     }
 
@@ -84,7 +84,7 @@ public class NumberOfIslandsTest
             new[] { '0', '0', '0' },
         };
 
-        Assert.Equal(0, NumberOfIslands.GetNumIslands(input));
+        Assert.Equal(0, NumberOfIslandsFast.GetNumIslands(input));
     }
 
     [Fact]
@@ -97,7 +97,7 @@ public class NumberOfIslandsTest
             new[] { '1', '1', '1' },
         };
 
-        Assert.Equal(1, NumberOfIslands.GetNumIslands(input));
+        Assert.Equal(1, NumberOfIslandsFast.GetNumIslands(input));
     }
 
     [Fact]
@@ -110,7 +110,7 @@ public class NumberOfIslandsTest
             new[] { '0', '0', '1' },
         };
 
-        Assert.Equal(2, NumberOfIslands.GetNumIslands(input));
+        Assert.Equal(2, NumberOfIslandsFast.GetNumIslands(input));
     }
 
     [Fact]
@@ -123,7 +123,7 @@ public class NumberOfIslandsTest
             new[] { '0', '0', '1' },
         };
 
-        Assert.Equal(3, NumberOfIslands.GetNumIslands(input));
+        Assert.Equal(3, NumberOfIslandsFast.GetNumIslands(input));
     }
 
     [Fact]
@@ -143,6 +143,6 @@ public class NumberOfIslandsTest
             new[] { '1', '0', '1', '1', '1', '1', '1', '1', '1', '0' }
         };
 
-        Assert.Equal(2, NumberOfIslands.GetNumIslands(input));
+        Assert.Equal(2, NumberOfIslandsFast.GetNumIslands(input));
     }
 }
