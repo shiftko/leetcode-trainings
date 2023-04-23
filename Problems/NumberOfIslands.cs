@@ -4,122 +4,127 @@ public static class NumberOfIslands
 {
     enum CellState
     {
-        IsLand = '1',
-        IsWater = '0'
+        Land = '1',
+        Water = '0'
     }
 
     public static int GetNumIslands(char[][] grid)
     {
-        const char land = '1';
-        const char water = '0';
-
         var islandCounter = 0;
 
-        var nodeList =
-            new Dictionary<(int m, int n), ((int m, int n)? parentX, (int m, int n)? parentY, int? islandId)>();
-        var cellQueue = new List<((int m, int n) cell, ((int m, int n)? parentX, (int m, int n)? parentY) ancestors)>
-        {
-            (cell: (m: 0, n: 0), ancestors: (parentX: null, parentY: null))
-        };
+        var initialCell = new Cell(0, 0, grid, null);
+
+        var queue = new List<Cell> { initialCell };
+
+        var processedCells = new Dictionary<(int m, int n), Cell>();
 
         var counter = 0;
-        while (counter < cellQueue.Count)
+        while (counter < queue.Count)
         {
-            var index = counter++;
-            var currentCell = cellQueue[index].cell;
-            var currentCellAncestors = cellQueue[index].ancestors;
+            var currentCell = queue[counter++];
 
-            // add or update node
-            if (nodeList.TryGetValue(currentCell, out var ancestors))
+            if (processedCells.TryGetValue((currentCell.M, currentCell.N), out var processedCell))
             {
-                if (ancestors.parentX is null)
+                if (currentCell.IsLand())
                 {
-                    nodeList[currentCell] = ancestors with { parentX = currentCellAncestors.parentX };
-                }
-                else if (ancestors.parentY is null)
-                {
-                    nodeList[currentCell] = ancestors with { parentY = currentCellAncestors.parentY };
+                    if (currentCell.Prev.IsLand() && processedCell.Prev.IsLand())
+                    {
+                        if (currentCell.Prev.Island.Id != processedCell.Prev.Island.Id)
+                        {
+                            currentCell.Island = currentCell.Prev.Island;
+                            currentCell.Island.Cells.Add(currentCell);
+                            MergeIslands(processedCell, currentCell);
+                            islandCounter--;
+                        }
+                    }
+                    else if (currentCell.Prev.IsLand() && !processedCell.Prev.IsLand())
+                    {
+                        processedCell.Island = currentCell.Prev.Island;
+                        processedCell.Island.Cells.Add(processedCell);
+                        islandCounter--;
+                    }
                 }
             }
             else
             {
-                nodeList.Add(currentCell, (currentCellAncestors.parentX, currentCellAncestors.parentY, islandId: null));
-            }
-
-            // add next cells to queue
-            if (currentCell.m + 1 < grid.Length)
-            {
-                cellQueue.Add((currentCell with { m = currentCell.m + 1 }, (parentX: currentCell, parentY: null)));
-            }
-
-            if (currentCell.n + 1 < grid[currentCell.m].Length)
-            {
-                cellQueue.Add((currentCell with { n = currentCell.n + 1 }, (parentX: null, parentY: currentCell)));
-            }
-        }
-
-        // count islands
-        var islandId = 0;
-        foreach (var (cell, ancestors) in nodeList)
-        {
-            var cellState = grid[cell.m][cell.n] == land ? CellState.IsLand : CellState.IsWater;
-
-            var parentX = ancestors.parentX;
-
-            var parentXState = parentX is null
-                ? CellState.IsWater
-                : grid[parentX.Value.m][parentX.Value.n] == land
-                    ? CellState.IsLand
-                    : CellState.IsWater;
-
-            var parentY = ancestors.parentY;
-            var parentYState = parentY is null
-                ? CellState.IsWater
-                : grid[parentY.Value.m][parentY.Value.n] == land
-                    ? CellState.IsLand
-                    : CellState.IsWater;
-
-            if (cellState == CellState.IsWater)
-            {
-                continue;
-            }
-
-            if (parentXState == CellState.IsWater && parentYState == CellState.IsWater)
-            {
-                islandCounter++;
-                nodeList[cell] = ancestors with { islandId = islandId++ };
-            }
-            else if (parentXState == CellState.IsLand && parentYState == CellState.IsLand)
-            {
-                // if parents have different islandId - we should reduce counter
-                var px = parentX ?? throw new ArgumentNullException();
-                var py = parentY ?? throw new ArgumentNullException();
-                if (nodeList[px].islandId != nodeList[py].islandId)
+                if (currentCell.IsLand())
                 {
-                    islandCounter--;
-                    // in this case we have collision we need to edit the identifiers
+                    if (currentCell.Prev is not null && currentCell.Prev.IsLand())
+                    {
+                        // inherits reference on an island and expands it
+                        currentCell.Island = currentCell.Prev.Island;
+                        currentCell.Island?.Cells.Add(currentCell);
+                    }
+                    else
+                    {
+                        // creates new island and expands it
+                        currentCell.Island = new Island(new List<Cell> { currentCell });
+                        islandCounter++;
+                    }
                 }
 
-                nodeList[cell] = ancestors with { islandId = nodeList[px].islandId };
-            }
-            else
-            {
-                // the case where one of the parents is land and the other is not
-                if (parentXState == CellState.IsLand)
+                processedCells.Add((currentCell.M, currentCell.N), currentCell);
+
+                #region Add the following cells to the processing queue
+
+                if (currentCell.M + 1 < grid.Length)
                 {
-                    // this cell is an extension of the island and should get its id
-                    var parent = parentX ?? throw new ArgumentNullException();
-                    nodeList[cell] = ancestors with { islandId = nodeList[parent].islandId };
+                    queue.Add(new Cell(currentCell.M + 1, currentCell.N, grid, currentCell));
                 }
-                else
+
+                if (currentCell.N + 1 < grid[currentCell.M].Length)
                 {
-                    // this cell is an extension of the island and should get its id
-                    var parent = parentY ?? throw new ArgumentNullException();
-                    nodeList[cell] = ancestors with { islandId = nodeList[parent].islandId };
+                    queue.Add(new Cell(currentCell.M, currentCell.N + 1, grid, currentCell));
                 }
+
+                #endregion
             }
         }
 
         return islandCounter;
+    }
+
+    private static void MergeIslands(Cell processedCell, Cell currentCell)
+    {
+        foreach (var cell in currentCell.Island.Cells)
+        {
+            cell.Island = processedCell.Island;
+            cell.Island.Cells.Add(cell);
+        }
+    }
+
+    private class Cell
+    {
+        public readonly int M;
+        public readonly int N;
+        public readonly char[][] Grid;
+        public Cell? Prev;
+
+        public Island? Island = null;
+
+        public Cell(int m, int n, char[][] grid, Cell? prev)
+        {
+            M = m;
+            N = n;
+            Grid = grid;
+            Prev = prev;
+        }
+
+        public bool IsLand()
+        {
+            return (CellState)Grid[M][N] == CellState.Land;
+        }
+    }
+
+    private class Island
+    {
+        public Guid Id { get; private set; }
+        public List<Cell> Cells;
+
+        public Island(List<Cell> cells)
+        {
+            Cells = cells;
+            Id = Guid.NewGuid();
+        }
     }
 }
